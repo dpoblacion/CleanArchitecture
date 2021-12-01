@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "index_patterns": [ "devices*" ],
+  "order": 1,
+  "settings": {
+    "number_of_shards": "1",
+    "auto_expand_replicas": "0-all",
+    "analysis": {
+      "analyzer": {
+        "non_case_sensitive_sort": {
+          "filter": [ "lowercase" ],
+          "type": "custom",
+          "tokenizer": "keyword"
+        },
+        "case_sensitive_sort": {
+          "type": "custom",
+          "tokenizer": "keyword"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "_doc": {
+      "dynamic": false,
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "name": {
+          "fielddata": true,
+          "analyzer": "non_case_sensitive_sort",
+          "type": "text",
+          "fields": {
+            "casesensitive": {
+              "analyzer": "case_sensitive_sort",
+              "type": "text"
+            },
+            "keyword": {
+              "ignore_above": 256,
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  }
+}
